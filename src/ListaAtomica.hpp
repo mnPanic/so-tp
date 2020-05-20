@@ -2,6 +2,8 @@
 #define LISTA_ATOMICA_HPP
 
 #include <atomic>
+// #include <pthread/pthread.h>
+#include <mutex>
 
 template<typename T>
 class ListaAtomica {
@@ -29,7 +31,15 @@ class ListaAtomica {
     }
 
     void insertar(const T &valor) {
-        // Completar (Ejercicio 1)
+        Nodo *n = new Nodo(valor);
+
+        // Insertamos atómicamente. Vamos actualizando el siguiente como la
+        // cabeza actual hasta que podamos exitósamente cambiar la cabeza actual
+        // por n. Así nos aseguramos que se hace de forma atómica.
+        do {
+            n->_siguiente = _cabeza.load();
+        } while(!_cabeza.compare_exchange_weak(n->_siguiente, n));
+        // TODO: Consultar el memory order.
     }
 
     T &cabeza() const {
