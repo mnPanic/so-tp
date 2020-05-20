@@ -1,0 +1,8 @@
+# OS X
+*.DS_Store
+
+# Jetbrains
+.idea
+
+# Builds
+build
