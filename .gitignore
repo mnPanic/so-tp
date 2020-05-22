@@ -6,3 +6,6 @@
 
 # Builds
 build
+
+# VS Code
+.vscode

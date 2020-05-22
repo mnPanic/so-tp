@@ -18,15 +18,57 @@ unsigned int HashMapConcurrente::hashIndex(std::string clave) {
 }
 
 void HashMapConcurrente::incrementar(std::string clave) {
-    // Completar (Ejercicio 2)
+    int tableIndex = hashIndex(clave);
+    ListaAtomica<hashMapPair> *entries = tabla[tableIndex];
+
+    locks[tableIndex].lock();
+    for (
+        auto it = entries->crearIt();
+        it.haySiguiente();
+        it.avanzar()
+    ) {
+        if (it.siguiente().first == clave) {
+            it.siguiente().second++;
+            locks[tableIndex].unlock();
+            return;
+        }
+    }
+
+    hashMapPair newEntry = hashMapPair(clave, 1);
+    entries->insertar(newEntry);
+    locks[tableIndex].unlock();
 }
 
 std::vector<std::string> HashMapConcurrente::claves() {
-    // Completar (Ejercicio 2)
+    std::vector<std::string> claves = std::vector<std::string>();
+
+    for (int i = 0; i < HashMapConcurrente::cantLetras; ++i) {
+        ListaAtomica<hashMapPair> *entries = tabla[i];
+        for (
+            auto it = entries->crearIt();
+            it.haySiguiente();
+            it.avanzar()
+        ) {
+            claves.push_back(it.siguiente().first);
+        }
+    }
+    return claves;
 }
 
 unsigned int HashMapConcurrente::valor(std::string clave) {
-    // Completar (Ejercicio 2)
+    int tableIndex = hashIndex(clave);
+    ListaAtomica<hashMapPair> *entries = tabla[tableIndex];
+
+    for (
+        auto it = entries->crearIt();
+        it.haySiguiente();
+        it.avanzar()
+    ) {
+        if (it.siguiente().first == clave) {
+            return it.siguiente().second;
+        }
+    }
+    return 0;
 }
 
 hashMapPair HashMapConcurrente::maximo() {

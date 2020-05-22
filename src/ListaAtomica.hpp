@@ -2,8 +2,6 @@
 #define LISTA_ATOMICA_HPP
 
 #include <atomic>
-// #include <pthread/pthread.h>
-#include <mutex>
 
 template<typename T>
 class ListaAtomica {
