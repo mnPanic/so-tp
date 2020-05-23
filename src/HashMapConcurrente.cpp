@@ -42,7 +42,7 @@ void HashMapConcurrente::incrementar(std::string clave) {
 std::vector<std::string> HashMapConcurrente::claves() {
     std::vector<std::string> claves = std::vector<std::string>();
 
-    for (int i = 0; i < HashMapConcurrente::cantLetras; ++i) {
+    for (unsigned int i = 0; i < HashMapConcurrente::cantLetras; ++i) {
         ListaAtomica<hashMapPair> *entries = tabla[i];
         for (
             auto it = entries->crearIt();
@@ -72,8 +72,8 @@ unsigned int HashMapConcurrente::valor(std::string clave) {
 }
 
 hashMapPair HashMapConcurrente::maximo() {
-    hashMapPair *max = new hashMapPair();
-    max->second = 0;
+    hashMapPair max;
+    max.second = 0;
 
     for (unsigned int index = 0; index < HashMapConcurrente::cantLetras; index++) {
         for (
@@ -81,14 +81,13 @@ hashMapPair HashMapConcurrente::maximo() {
             it.haySiguiente();
             it.avanzar()
         ) {
-            if (it.siguiente().second > max->second) {
-                max->first = it.siguiente().first;
-                max->second = it.siguiente().second;
+            if (it.siguiente().second > max.second) {
+                max = it.siguiente();
             }
         }
     }
 
-    return *max;
+    return max;
 }
 
 hashMapPair HashMapConcurrente::maximoParalelo(unsigned int cantThreads) {
