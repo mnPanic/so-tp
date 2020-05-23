@@ -99,3 +99,17 @@ thread safe.
 La implementación de cargarMultiplesArchivos muy similar a maximoParalelo, solo
 que con menos recursos. La lista de files no hace falta que tenga ningun
 mecanismo de proteccion ya que solo se lee.
+
+## Ejercicio 5
+
+En este punto, buscaremos evaluar qu´e ventajas ofrece, en t´erminos de performance,
+la ejecuci´on concurrente a la hora de encontrar la palabra con mayor cantidad de
+apariciones en un conjunto de archivos. Elaboren en primer lugar una hip´otesis,
+bas´andose en los conocimientos que poseen sobre el tema.
+
+* Suponemos que aumentar la cantidad de threads mejorará pero solo hasta cierto
+  punto.
+* Claramente en maximo no sirve tener mas que la cantidad de entries en
+  la tabla (26)
+* Disminuye la performance al lanzar mas threads que cores tiene la maquina.
+* 4 puede llegar a andar peor que 3
