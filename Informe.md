@@ -95,3 +95,7 @@ más listas por ver. De esta forma, nos evitamos locks innecesarios.
 Para la implementación de `cargarArchivo` no fue necesario tomar ningún tipo de
 recaudo nuevo, pues se utiliza sólamente `incrementar` que ya implementamos de
 thread safe.
+
+La implementación de cargarMultiplesArchivos muy similar a maximoParalelo, solo
+que con menos recursos. La lista de files no hace falta que tenga ningun
+mecanismo de proteccion ya que solo se lee.
