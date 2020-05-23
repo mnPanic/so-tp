@@ -89,3 +89,9 @@ Los recursos necesarios fueron los siguientes
 Como optimización, en realidad cada thread no chequea si su máximo es mayor al
 actual después de ver cada lista, sino que lo hace al final, cuando ya no tiene
 más listas por ver. De esta forma, nos evitamos locks innecesarios.
+
+## Ejercicio 4
+
+Para la implementación de `cargarArchivo` no fue necesario tomar ningún tipo de
+recaudo nuevo, pues se utiliza sólamente `incrementar` que ya implementamos de
+thread safe.
