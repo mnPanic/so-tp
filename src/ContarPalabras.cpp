@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
         filePaths.push_back(argv[i]);
     }
 
-    HashMapConcurrente hashMap = HashMapConcurrente();
+    HashMapConcurrente hashMap;
     cargarMultiplesArchivos(hashMap, cantThreadsLectura, filePaths);
     auto maximo = hashMap.maximoParalelo(cantThreadsMaximo);
 

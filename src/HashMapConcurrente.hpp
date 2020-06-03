@@ -4,7 +4,6 @@
 #include <atomic>
 #include <string>
 #include <vector>
-// #include <pthread/pthread.h>
 #include <mutex>
 
 #include "ListaAtomica.hpp"
@@ -28,10 +27,10 @@ class HashMapConcurrente {
 
    private:
       ListaAtomica<hashMapPair> *tabla[HashMapConcurrente::cantLetras];
+      std::mutex locks[HashMapConcurrente::cantLetras];
 
       void lockAllEntries();
       void unlockAllEntries();
-      std::mutex locks[HashMapConcurrente::cantLetras];
 
       static unsigned int hashIndex(std::string clave);
 };
