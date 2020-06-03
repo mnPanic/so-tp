@@ -2,6 +2,7 @@
 
 #include "HashMapConcurrente.hpp"
 #include "CargarArchivos.hpp"
+#include <time.h>
 
 int main(int argc, char **argv) {
     if (argc < 4) {
@@ -27,9 +28,34 @@ int main(int argc, char **argv) {
     }
 
     HashMapConcurrente hashMap;
-    cargarMultiplesArchivos(hashMap, cantThreadsLectura, filePaths);
-    auto maximo = hashMap.maximoParalelo(cantThreadsMaximo);
+    timespec clockCargaInicio;
+    timespec clockCargaFin;
 
+    if (clock_gettime(CLOCK_REALTIME, &clockCargaInicio) != 0) {
+        std::cerr << "Error creando clock de carga inicio" << std::endl;
+        return -1;
+    }
+    cargarMultiplesArchivos(hashMap, cantThreadsLectura, filePaths);
+    if (clock_gettime(CLOCK_REALTIME, &clockCargaFin) != 0) {
+        std::cerr << "Error creando clock de carga fin" << std::endl;
+        return -1;
+    }
+
+    timespec clockMaximoInicio;
+    timespec clockMaximoFin;
+
+    if (clock_gettime(CLOCK_REALTIME, &clockMaximoInicio) != 0) {
+        std::cerr << "Error creando clock de máximo inicio" << std::endl;
+        return -1;
+    }
+    auto maximo = hashMap.maximoParalelo(cantThreadsMaximo);
+    if (clock_gettime(CLOCK_REALTIME, &clockMaximoFin) != 0) {
+        std::cerr << "Error creando clock de máximo fin" << std::endl;
+        return -1;
+    }
+
+    std::cout << clockCargaFin.tv_nsec - clockCargaInicio.tv_nsec << std::endl;
+    std::cout << clockMaximoFin.tv_nsec - clockMaximoInicio.tv_nsec << std::endl;
     std::cout << maximo.first << " " << maximo.second << std::endl;
 
     return 0;
