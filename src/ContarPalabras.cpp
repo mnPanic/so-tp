@@ -3,6 +3,11 @@
 #include "HashMapConcurrente.hpp"
 #include "CargarArchivos.hpp"
 #include <time.h>
+#include <math.h>
+
+timespec diff(timespec &start, timespec &end);
+long timespecToMillis(timespec &time);
+long timespecToMicros(timespec &time);
 
 int main(int argc, char **argv) {
     if (argc < 4) {
@@ -54,9 +59,46 @@ int main(int argc, char **argv) {
         return -1;
     }
 
-    std::cout << clockCargaFin.tv_nsec - clockCargaInicio.tv_nsec << std::endl;
-    std::cout << clockMaximoFin.tv_nsec - clockMaximoInicio.tv_nsec << std::endl;
+    timespec clockCarga = diff(clockCargaInicio, clockCargaFin);
+    timespec clockMax = diff(clockMaximoInicio, clockMaximoFin);
+    std::cout << timespecToMillis(clockCarga) << std::endl;
+    std::cout << timespecToMicros(clockMax) << std::endl;
     std::cout << maximo.first << " " << maximo.second << std::endl;
 
     return 0;
+}
+
+timespec diff(timespec &start, timespec &end)
+{
+	timespec temp;
+	if ((end.tv_nsec-start.tv_nsec)<0) {
+		temp.tv_sec = end.tv_sec-start.tv_sec-1;
+		temp.tv_nsec = 1000000000+end.tv_nsec-start.tv_nsec;
+	} else {
+		temp.tv_sec = end.tv_sec-start.tv_sec;
+		temp.tv_nsec = end.tv_nsec-start.tv_nsec;
+	}
+	return temp;
+}
+
+long timespecToMillis(timespec &time) {
+    time_t s  = time.tv_sec;
+    long ms = round(time.tv_nsec / 1.0e6); // Convert nanoseconds to milliseconds
+    if (ms > 999) {
+        s++;
+        ms = 0;
+    }
+
+    return s * 1000 + ms;
+}
+
+long timespecToMicros(timespec &time) {
+    time_t s  = time.tv_sec;
+    long us = round(time.tv_nsec / 1.0e3); // Convert nanoseconds to microseconds
+    if (us > 999) {
+        s++;
+        us = 0;
+    }
+
+    return s * 1000000 + us;
 }
