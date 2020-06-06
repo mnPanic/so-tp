@@ -48,19 +48,57 @@ a) ¿Qu´e problemas puede ocasionar que maximo e incrementar se ejecuten
 concurrentemente? Piensen un escenario de ejecuci´on en que maximo devuelva un
 resultado que no fue, en ning´un momento, el m´aximo de la tabla.
 
-```text
-thread A      thread B
-maximo()      for(i = 1...50) insertar("avion")
+Para ilustrar un escenario. imaginemos el siguiente código de un potencial
+usuario de nuestro hashmap atómico (en pseudocódigo)
 
-thread A                  thread B
-maximo()
-  max en lista 1 (a)
-  .                       for(i = 1...50) insertar("avion")
-  max en lista 2
-  ....
+```python
+# thread principal
+map = HashMapConcurrente()
+
+thread(
+  for 1 to 50:
+    map.insertar("ardilla")
+
+  for 1 to 21:
+    map.insertar("zorro")
+)
+
+thread(map.maximo())
 ```
 
-// TODO: preguntar que quiere decir "en ningun momento"
+Donde `thread` corre lo especificado en un thread.
+
+Todos los `"ardilla"` irían a parar a la misma lista, la correspondiente al slot
+0 del hash map, y los `"zorro"` al ultimo.
+
+Para algún scheduling, podría suceder que el thread A, que hace las inserciones,
+ejecute hasta insertar 20 veces ardilla, y luego sea desalojado por el scheduler
+a favor de B. Este llega a recorrer toda la lista de la letra A, y toma a
+ardilla como el máximo actual con valor 20, y luego recorre las listas
+siguientes. Luego le toca nuevamente a A que hace las inserciones de zorro, y
+finaliza su ejecición.
+
+```python
+# Thread A        # Thread B
+# inserciones
+1  ardilla
+2  ardilla
+...
+20 ardilla        # <---- punto hasta el que ve maximo del slot 0
+...
+50 ardilla
+1  zorro
+2  zorro
+...
+21 zorro          # <---- punto hasta el que ve maximo del ultimo slot
+```
+
+Cuando ejecute B hasta finalizar, se va a encontrar que zorro tiene 21
+apariciones, que es mayor a las 20 que tenía de ardilla, y lo tomará como
+máximo.
+
+Pero para el thread principal que ejecuta primero las 50 inserciones de ardilla
+y luego las 21 de zorro, nunca fué el máximo, y ardilla siempre lo fué.
 
 b) Describan brevemente su implementaci´on de maximoParalelo. ¿Cu´al fue
 la estrategia elegida para repartir el trabajo entre los threads? ¿Qu´e recursos
