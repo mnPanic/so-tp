@@ -1,42 +1,38 @@
-# Trabajo práctico 1 - Threading
+# Trabajo Práctico 1 - Threading
 
-## Estructura
+## Integrantes
 
-* En la carpeta `src` encontrarán el código que deben completar.
-* En la carpeta `data` encontrarán algunos archivos que pueden usar para probar
-  su solución. Les recomendamos que hagan pruebas con otros archivos, en
-  particular, archivos de mayor tamaño.
-* En la carpeta `scripts` encontrarán un script de `awk` que pueden usar para
-  contar la cantidad de apariciones de palabras en un archivo. Combinando con
-  el comando `sort` pueden usarlo para averiguar las palabras con más
-  apariciones y contrastar con su solución, ejecutando:
+Integrante              | LU
+----------------------- | --
+Manuel Panichelli       | 72/18
+Vladimir Pomsztein      | 364/18
+Gaston Einan Rosinov    | 37/18
 
-  ```bash
-  awk -f contar-palabras.awk <archivo> | sort -nk 2
-  ```
+## Compilar
 
-  Las palabras más repetidas aparecerán al final del output.
+Para compilar el tp, basta con
 
-## Compilación
+    make
 
-* El `Makefile` debería permitirles compilar el código con el comando `make`.
-  El ejecutable generado estará en la carpeta `build`.
-* El ejecutable se puede correr de la siguiente forma:
-
-  ```bash
-  ./ContarPalabras <threads_lectura> <threads_maximo> <archivo1> [<archivo2>...]
-  ```
-
-  donde:
-  * `threads_lectura` es la cantidad de threads que se usará para leer archivos,
-  * `threads_maximo` es la cantidad de threads que se usará para computar
-    la palabra con más apariciones, y
-  * `archivo1`, `archivo2`, etc. son los nombres de los archivos a procesar.
+Desde el root del proyecto.
 
 ## Tests
 
-* Ejecutando `make test` podrán compilar y ejecutar una pequeña suite de tests
-  unitarios. Estos tests solo pretenden facilitarles el proceso de desarrollo
-  verificando algunos aspectos básicos del funcionamiento del código.
-  **No evalúan aspectos de concurrencia** y por lo tanto no brindan ninguna
-  garantía de que el código escrito sea correcto.
+- Para correr los tests de forma usual
+
+      make test
+
+- Para correr los tests varias veces (y dar mas confianza de que no hay
+  condiciones de carrera)
+
+      ./src/runner.sh | tqdm --total 100000
+
+## Experimentación
+
+Se encuentra en el notebook `notebooks/ExperimentacionThreads`, basta con
+correrlo para obtener los mismos resultados.
+
+## Informe
+
+El informe fue hecho en [overleaf](https://www.overleaf.com/read/rydfpmkzchxy)
+y se encuentra una copia en el directorio [informe](informe)

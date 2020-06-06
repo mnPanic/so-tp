@@ -1,5 +1,7 @@
 # TP-SO
 
+_**Disclaimer: esto es solo un draft, que se deja de lado a favor del latex**_
+
 ## Ejercicio 1
 
 * Una operación es atómica cuando la misma resulta indivisible. Más 
