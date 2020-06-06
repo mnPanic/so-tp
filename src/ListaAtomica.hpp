@@ -37,7 +37,6 @@ class ListaAtomica {
         do {
             n->_siguiente = _cabeza.load();
         } while(!_cabeza.compare_exchange_weak(n->_siguiente, n));
-        // TODO: Consultar el memory order.
     }
 
     T &cabeza() const {
